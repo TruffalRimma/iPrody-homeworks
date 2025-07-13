@@ -1,0 +1,85 @@
+### Сгенерированные файлы ###
+# Файлы сборки (Maven/Gradle)
+target/
+build/
+out/
+bin/
+.gradle/
+
+# Логи и артефакты
+*.log
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+*.class
+
+# Файлы зависимостей
+dependency-reduced-pom.xml
+.mvn/wrapper/maven-wrapper.jar
+
+### IDE ###
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+*.ids
+*.orig
+
+# Eclipse
+.settings/
+.project
+.classpath
+.factorypath
+.metadata/
+bin/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# NetBeans
+nbproject/
+nbactions.xml
+.nb-gradle/
+
+### Системные файлы ###
+# ОС
+.DS_Store
+Thumbs.db
+
+# Временные файлы
+*.tmp
+*.bak
+*.swp
+*~.nib
+
+### Плагины и инструменты ###
+# Maven
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+
+# Gradle
+.gradletasknamecache
+
+# Jacoco (покрытие кода)
+.jacoco/
+jacoco.exec
+
+### Локальные настройки ###
+# Файлы конфигурации (если не нужно коммитить)
+*.properties
+*.yml
+*.yaml
+.env
+*.cfg
+
+# Кеш IDE
+.attach_pid*
+*.hprof
+heapdump.hprof
