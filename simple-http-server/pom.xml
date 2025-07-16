@@ -6,7 +6,10 @@
 
     <groupId>com.iprody</groupId>
     <artifactId>simple-http-server</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>Simple HTTP Server</name>
+    <description>The simplest HTTP server you can imagine</description>
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
