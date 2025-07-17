@@ -15,13 +15,10 @@ import java.util.Map;
 public class PaymentController {
 
     private final Map<Long, Payment> paymentMap = new HashMap<>() {{
-
-        for (long i = 1; i < 6; i++) {
-            Payment payment = new Payment(i, 11.11 * i);
-            put(payment.getId(), payment);
-        }
-
-    }};
+            for (long i = 1; i < 6; i++) {
+                put(i, new Payment(i, 11.11 * i));
+            }
+        }};
 
     @GetMapping("/{id}")
     public Payment getPaymentById(@PathVariable Long id) {

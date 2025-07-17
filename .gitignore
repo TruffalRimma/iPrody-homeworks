@@ -23,6 +23,7 @@ dependency-reduced-pom.xml
 ### IDE ###
 # IntelliJ IDEA
 .idea/
+!.idea/runConfigurations
 *.iml
 *.iws
 *.ipr
@@ -73,8 +74,8 @@ jacoco.exec
 ### Локальные настройки ###
 # Файлы конфигурации (если не нужно коммитить)
 *.properties
-*.yml
-*.yaml
+!*.yml
+!*.yaml
 .env
 *.cfg
 
