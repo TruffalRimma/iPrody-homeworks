@@ -28,6 +28,25 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- Spring Boot Starter для Spring Data JPA
+        При помощи одного стартера мы подключаем две библиотеки
+            1. Hibernate - это наиболее популярная ORM библиотека. Она дает возможность
+            удобно отображать табличные данные на коллекции Java классов. Также эта
+            библиотека совместима со стандартом JPA
+            2. Spring Data JPA - это подсистема Spring для более удобной работы с JPA
+            совместимыми ORM провайдерами, такими как Hibernate.   -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- Драйвер базы данных PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.7</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -57,7 +76,8 @@
                 </executions>
                 <configuration>
                     <configLocation>../checkstyle.xml</configLocation>
-                    <encoding>UTF-8</encoding>
+                    <inputEncoding>UTF_8</inputEncoding>
+                    <outputEncoding>UTF-8</outputEncoding>
                     <consoleOutput>true</consoleOutput>
                     <failOnViolation>true</failOnViolation>
                 </configuration>
