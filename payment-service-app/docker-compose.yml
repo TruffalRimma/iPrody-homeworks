@@ -1,10 +1,12 @@
-version: '3.8'
+# Запуск = docker-compose up -d,
+# Остановка = docker-compose down (-v) - Ключ -v указывает, что при остановке
+# нужно также удалить все тома (volumes) с данными
 
 services:
-  payment-service-app:
-    image: payment-service-app
-    ports:
-      - "8080:8080"
+#  payment-service-app:
+#    image: payment-service-app
+#    ports:
+#      - "8080:8080"
 
   postgres:
     image: postgres:16
