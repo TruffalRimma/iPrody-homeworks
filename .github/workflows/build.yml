@@ -1,10 +1,10 @@
 name: Build Project for PR
 
 on:
-  # Запуск только при создании или обновлении pull request в ветку main
   pull_request:
     branches:
-      - 'main'
+#      - 'main' # Запуск только при создании или обновлении pull request в ветку main
+      - '**'    # Триггер на pull request в любую ветку
 
 jobs:
   build:
