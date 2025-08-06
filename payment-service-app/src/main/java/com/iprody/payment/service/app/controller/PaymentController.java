@@ -1,17 +1,12 @@
 package com.iprody.payment.service.app.controller;
 
-import com.iprody.payment.service.app.persistence.entity.Payment;
-import com.iprody.payment.service.app.persistency.PaymentFilter;
-import com.iprody.payment.service.app.persistency.PaymentFilterFactory;
-import com.iprody.payment.service.app.persistency.PaymentRepository;
+import com.iprody.payment.service.app.dto.PaymentDto;
+import com.iprody.payment.service.app.persistence.PaymentFilter;
+import com.iprody.payment.service.app.service.PaymentService;
+import com.iprody.payment.service.app.service.PaymentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,19 +15,21 @@ import java.util.UUID;
 @RequestMapping("/api/payments")
 public class PaymentController {
 
+    private final PaymentService paymentService;
+
     @Autowired
-    private PaymentRepository paymentRepository;
+    public PaymentController(PaymentServiceImpl paymentService) {
+        this.paymentService = paymentService;
+    }
 
     @GetMapping("/{guid}")
-    public ResponseEntity<Payment> getPaymentByGuid(@PathVariable UUID guid) {
-        final Payment payment = paymentRepository.findById(guid)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found"));
-        return ResponseEntity.ok(payment);
+    public PaymentDto getPaymentByGuid(@PathVariable UUID guid) {
+        return paymentService.get(guid);
     }
 
     @GetMapping
-    public List<Payment> getPayments() {
-        return paymentRepository.findAll();
+    public List<PaymentDto> getPayments() {
+        return paymentService.getAll();
     }
 
     /*
@@ -47,22 +44,13 @@ public class PaymentController {
     Иначе для каждого поля из класса PaymentFilter нам пришлось бы написать отдельный параметр в методе контроллера.
      */
     @GetMapping("/search")
-    public Page<Payment> searchPayments(
+    public Page<PaymentDto> searchPayments(
         @ModelAttribute PaymentFilter filter,
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "25") int size,
         @RequestParam(defaultValue = "createdAt") String sortBy,
         @RequestParam(defaultValue = "desc") String direction
     ) {
-        //  descending() → Сортировка от большего к меньшему (Z → A, 100 → 1, новые → старые)
-        //  ascending() → Сортировка от меньшего к большему (A → Z, 1 → 100, старые → новые)
-        final Sort sort = direction.equalsIgnoreCase("desc")
-            ? Sort.by(sortBy).descending()
-            : Sort.by(sortBy).ascending();
-
-        return paymentRepository.findAll(
-                PaymentFilterFactory.fromFilter(filter),
-                PageRequest.of(page, size, sort)
-        );
+        return paymentService.search(filter, page, size, sortBy, direction);
     }
 }
