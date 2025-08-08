@@ -3,7 +3,7 @@ package com.iprody.payment.service.app.persistence;
 import com.iprody.payment.service.app.persistence.entity.PaymentStatus;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 public class PaymentFilter {
 
@@ -11,8 +11,8 @@ public class PaymentFilter {
     private String currency;
     private BigDecimal minAmount;
     private BigDecimal maxAmount;
-    private Instant createdAfter;
-    private Instant createdBefore;
+    private OffsetDateTime createdAfter;
+    private OffsetDateTime createdBefore;
 
     public String getCurrency() {
         return currency;
@@ -38,19 +38,19 @@ public class PaymentFilter {
         this.maxAmount = maxAmount;
     }
 
-    public Instant getCreatedAfter() {
+    public OffsetDateTime getCreatedAfter() {
         return createdAfter;
     }
 
-    public void setCreatedAfter(Instant createdAfter) {
+    public void setCreatedAfter(OffsetDateTime createdAfter) {
         this.createdAfter = createdAfter;
     }
 
-    public Instant getCreatedBefore() {
+    public OffsetDateTime getCreatedBefore() {
         return createdBefore;
     }
 
-    public void setCreatedBefore(Instant createdBefore) {
+    public void setCreatedBefore(OffsetDateTime createdBefore) {
         this.createdBefore = createdBefore;
     }
 

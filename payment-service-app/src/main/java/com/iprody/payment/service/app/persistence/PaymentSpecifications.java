@@ -5,7 +5,7 @@ import com.iprody.payment.service.app.persistence.entity.PaymentStatus;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 /*
 Specification - это функциональный интерфейс с одним методом, включающем в себя три параметра:
@@ -37,17 +37,17 @@ public final class PaymentSpecifications {
     }
 
     // создано до
-    public static Specification<Payment> createdBefore(Instant before) {
+    public static Specification<Payment> createdBefore(OffsetDateTime before) {
         return (root, query, cb) -> cb.lessThan(root.get("createdAt"), before);
     }
 
     // создано после
-    public static Specification<Payment> createdAfter(Instant after) {
+    public static Specification<Payment> createdAfter(OffsetDateTime after) {
         return (root, query, cb) -> cb.greaterThan(root.get("createdAt"), after);
     }
 
     // диапазон дат создания
-    public static Specification<Payment> createdBetween(Instant after, Instant before) {
+    public static Specification<Payment> createdBetween(OffsetDateTime after, OffsetDateTime before) {
         return (root, query, cb) -> cb.between(root.get("createdAt"), after, before);
     }
 
