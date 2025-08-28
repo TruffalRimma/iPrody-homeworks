@@ -1,17 +1,30 @@
 package com.iprody.payment.service.app.controller;
 
 import com.iprody.payment.service.app.dto.PaymentDto;
+import com.iprody.payment.service.app.dto.PaymentNoteUpdateDto;
 import com.iprody.payment.service.app.persistence.PaymentFilter;
 import com.iprody.payment.service.app.service.PaymentService;
 import com.iprody.payment.service.app.service.PaymentServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
+/*
+@RestController - означает, что класс является REST-контроллером. Фактически @RestController это
+комбинированная аннотация состоящая из аннотаций @Controller и @ResponseBody.
+Добавление аннотации @ResponseBody необходимо для того, чтобы возвращаемый
+методом контроллера результат напрямую преобразовывался в JSON для отправки в качестве ответа на запрос.
+ */
 @RestController
+/*
+@RequestMapping - универсальная аннотация для задания пути и/или HTTP-метода. Применяется как на
+уровне класса (для базового URL), так и на уровне метода.
+ */
 @RequestMapping("/api/payments")
 public class PaymentController {
 
@@ -22,6 +35,9 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
+    /*
+    @PathVariable - извлекает переменную из URL-пути и передаёт её в метод как аргумент.
+     */
     @GetMapping("/{guid}")
     public PaymentDto getPaymentByGuid(@PathVariable UUID guid) {
         return paymentService.get(guid);
@@ -52,5 +68,33 @@ public class PaymentController {
         @RequestParam(defaultValue = "desc") String direction
     ) {
         return paymentService.search(filter, page, size, sortBy, direction);
+    }
+
+    /*
+    @ResponseStatus - Позволяет указать HTTP-статус, который вернётся в ответе при успешном выполнении метода.
+
+    @RequestBody - позволяет получить данные из тела HTTP-запроса и преобразовать их в Java-объект.
+    Без этой аннотации содержимое запроса не будет правильно отображаться на DTO параметр.
+     */
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public PaymentDto create(@RequestBody PaymentDto dto) {
+        return paymentService.create(dto);
+    }
+
+    @PutMapping("/{guid}")
+    public PaymentDto update(@PathVariable UUID guid, @RequestBody PaymentDto dto) {
+        return paymentService.update(guid, dto);
+    }
+
+    @PatchMapping("/{guid}/note")
+    public PaymentDto updateNote(@PathVariable UUID guid, @RequestBody @Valid PaymentNoteUpdateDto dto) {
+        return paymentService.updateNote(guid, dto.getNote());
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{guid}")
+    public void delete(@PathVariable UUID guid) {
+        paymentService.delete(guid);
     }
 }

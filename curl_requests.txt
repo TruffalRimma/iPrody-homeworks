@@ -1,0 +1,56 @@
+# ==============================================
+# CURL запросы для тестирования PaymentController
+# ==============================================
+
+# 1. GET /api/payments/{guid} - получение платежа по GUID
+curl -X GET http://localhost:8080/api/payments/ac328a1a-1e60-4dd3-bee5-ed573d74c841
+
+# 2. GET /api/payments - получение всех платежей
+curl -X GET http://localhost:8080/api/payments
+
+# 3. GET /api/payments/search - поиск платежей с фильтрацией и пагинацией
+# Без фильтров
+curl -X GET http://localhost:8080/api/payments/search?page=0&size=10&sortBy=createdAt&direction=desc
+
+# С фильтрами
+curl -X GET http://localhost:8080/api/payments/search?amountFrom=100&amountTo=1000&status=RECEIVED&page=0&size=25&sortBy=amount&direction=asc
+
+# 4. POST /api/payments - создание нового платежа
+curl -X POST http://localhost:8080/api/payments \
+-H "Content-Type: application/json" \
+-d '{
+    "guid": "ac328a1a-1e60-4dd3-bee5-ed573d74c841",
+    "inquiryRefId": "607ed0ea-cb8a-4ff8-a694-1213c314e65c",
+    "amount": 99.99,
+    "currency": "USD",
+    "transactionRefId": "f113e373-b7b0-4f38-abf6-ccc3a89b8236",
+    "status": "RECEIVED",
+    "note": "Initial test payment",
+    "createdAt": "2025-01-01T09:00:00Z",
+    "updatedAt": "2025-01-01T09:00:00Z"
+}'
+
+# 5. PUT /api/payments/{guid} - полное обновление платежа
+curl -X PUT http://localhost:8080/api/payments/f7eebc99-9c0b-4ef8-bb6d-6bb9bd380a10 \
+-H "Content-Type: application/json" \
+-d ' {
+    "guid": "f7eebc99-9c0b-4ef8-bb6d-6bb9bd380a10",
+    "inquiryRefId": "f7eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+    "amount": 100.50,
+    "currency": "USD",
+    "transactionRefId": "f7eebc99-9c0b-4ef8-bb6d-6bb9bd380a12",
+    "status": "RECEIVED",
+    "note": "Note for the payment",
+    "createdAt": "2023-01-15T10:30:00Z",
+    "updatedAt": "2023-01-15T10:30:00Z"
+}'
+
+# 6. PATCH /api/payments/{guid}/note - обновление только заметки платежа
+curl -X PATCH http://localhost:8080/api/payments/f7eebc99-9c0b-4ef8-bb6d-6bb9bd380a10/note \
+-H "Content-Type: application/json" \
+-d '{
+    "note": "New updated note for the payment"
+}'
+
+# 7. DELETE /api/payments/{guid} - удаление платежа
+curl -X DELETE http://localhost:8080/api/payments/ac328a1a-1e60-4dd3-bee5-ed573d74c841

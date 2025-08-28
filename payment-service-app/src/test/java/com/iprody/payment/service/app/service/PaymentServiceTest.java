@@ -202,6 +202,105 @@ class PaymentServiceTest {
         assertEquals(Sort.Direction.DESC, capturedPageRequest.getSort().getOrderFor(sortBy).getDirection());
     }
 
+    @Test
+    void create_WhenRepositorySuccessfullySavedPaymentFromPaymentDto_ReturnsExactSamePaymentDto() {
+        // given
+        when(paymentMapper.toEntity(paymentDto)).thenReturn(payment);
+        when(paymentRepository.save(payment)).thenReturn(payment);
+        when(paymentMapper.toDto(payment)).thenReturn(paymentDto);
+
+        // when
+        PaymentDto result = paymentService.create(paymentDto);
+
+        // then
+        assertEquals(paymentDto.getGuid(), result.getGuid());
+        assertEquals(paymentDto.getInquiryRefId(), result.getInquiryRefId());
+        assertEquals(paymentDto.getAmount(), result.getAmount());
+        assertEquals(paymentDto.getCurrency(), result.getCurrency());
+        assertEquals(paymentDto.getTransactionRefId(), result.getTransactionRefId());
+        assertEquals(paymentDto.getStatus(), result.getStatus());
+        assertEquals(paymentDto.getNote(), result.getNote());
+        assertEquals(paymentDto.getCreatedAt(), result.getCreatedAt());
+        assertEquals(paymentDto.getUpdatedAt(), result.getUpdatedAt());
+    }
+
+    @Test
+    void update_WhenPaymentExistsById_ReturnsUpdatedPaymentDto() {
+        // given
+        when(paymentRepository.existsById(guid)).thenReturn(true);
+        when(paymentMapper.toEntity(paymentDto)).thenReturn(payment);
+        when(paymentRepository.save(payment)).thenReturn(payment);
+        when(paymentMapper.toDto(payment)).thenReturn(paymentDto);
+
+        // when
+        PaymentDto result = paymentService.update(guid, paymentDto);
+
+        // then
+        assertEquals(guid, result.getGuid());
+        assertEquals(BigDecimal.valueOf(123.45), result.getAmount());
+        assertEquals("USD", result.getCurrency());
+        assertEquals(PaymentStatus.APPROVED, result.getStatus());
+        assertEquals("Test note", result.getNote());
+    }
+
+    @Test
+    void update_WhenPaymentDoesNotExistById_ThrowsException() {
+        // given
+        when(paymentRepository.existsById(guid)).thenReturn(false);
+
+        // when + then
+        Assertions.assertThatThrownBy(() -> paymentService.update(guid, paymentDto))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("Платеж не найден: " + guid);
+    }
+
+    @Test
+    void updateNote_WhenOptionalPaymentIsNotEmpty_ReturnsPaymentDtoWithNewNote() {
+        // given
+        when(paymentRepository.findById(guid)).thenReturn(Optional.of(payment));
+        when(paymentRepository.save(payment)).thenReturn(payment);
+        when(paymentMapper.toDto(payment)).thenReturn(paymentDto);
+
+        // when
+        PaymentDto result = paymentService.updateNote(guid, "Test note 2");
+
+        // then
+        ArgumentCaptor<Payment> paymentCaptor = ArgumentCaptor.forClass(Payment.class);
+        verify(paymentRepository).save(paymentCaptor.capture());
+        assertEquals("Test note 2", paymentCaptor.getValue().getNote());
+    }
+
+    @Test
+    void updateNote_WhenOptionalPaymentIsEmpty_ThrowsException() {
+        // given
+        when(paymentRepository.findById(guid)).thenReturn(Optional.empty());
+
+        // when + then
+        Assertions.assertThatThrownBy(() -> paymentService.updateNote(guid, "Test note 2"))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("Платеж не найден: " + guid);
+    }
+
+    @Test
+    void delete_WhenPaymentExistsById_DoesNotThrowException() {
+        // given
+        when(paymentRepository.existsById(guid)).thenReturn(true);
+
+        // when + then
+        Assertions.assertThatNoException().isThrownBy(() -> paymentService.delete(guid));
+    }
+
+    @Test
+    void delete_WhenPaymentDoesNotExistById_ThrowsException() {
+        // given
+        when(paymentRepository.existsById(guid)).thenReturn(false);
+
+        // when + then
+        Assertions.assertThatThrownBy(() -> paymentService.delete(guid))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("Платеж не найден: " + guid);
+    }
+
     /*
     Параметризованные тесты позволяют выполнять один и тот же тестовый метод с
     разными наборами данных. Это помогает избежать дублирования кода и делает тесты
