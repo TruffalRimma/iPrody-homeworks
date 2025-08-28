@@ -1,13 +1,13 @@
 package com.iprody.payment.service.app.service;
 
 import com.iprody.payment.service.app.dto.PaymentDto;
+import com.iprody.payment.service.app.exception.EntityNotFoundException;
 import com.iprody.payment.service.app.mapper.PaymentMapper;
 import com.iprody.payment.service.app.persistence.PaymentFilter;
 import com.iprody.payment.service.app.persistence.PaymentFilterFactory;
 import com.iprody.payment.service.app.persistence.PaymentRepository;
 import com.iprody.payment.service.app.persistence.entity.Payment;
 import com.iprody.payment.service.app.persistence.entity.PaymentStatus;
-import jakarta.persistence.EntityNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -115,7 +115,7 @@ class PaymentServiceTest {
         // when + then
         Assertions.assertThatThrownBy(() -> paymentService.get(guid))
                 .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("Платеж не найден: " + guid);
+                .hasMessage("Платеж не найден");
     }
 
     @Test
@@ -251,7 +251,7 @@ class PaymentServiceTest {
         // when + then
         Assertions.assertThatThrownBy(() -> paymentService.update(guid, paymentDto))
                 .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("Платеж не найден: " + guid);
+                .hasMessage("Платеж не найден");
     }
 
     @Test
@@ -278,7 +278,7 @@ class PaymentServiceTest {
         // when + then
         Assertions.assertThatThrownBy(() -> paymentService.updateNote(guid, "Test note 2"))
                 .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("Платеж не найден: " + guid);
+                .hasMessage("Платеж не найден");
     }
 
     @Test
@@ -298,7 +298,7 @@ class PaymentServiceTest {
         // when + then
         Assertions.assertThatThrownBy(() -> paymentService.delete(guid))
                 .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("Платеж не найден: " + guid);
+                .hasMessage("Платеж не найден");
     }
 
     /*
