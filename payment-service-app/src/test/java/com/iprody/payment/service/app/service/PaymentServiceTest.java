@@ -262,7 +262,7 @@ class PaymentServiceTest {
         when(paymentMapper.toDto(payment)).thenReturn(paymentDto);
 
         // when
-        PaymentDto result = paymentService.updateNote(guid, "Test note 2");
+        paymentService.updateNote(guid, "Test note 2");
 
         // then
         ArgumentCaptor<Payment> paymentCaptor = ArgumentCaptor.forClass(Payment.class);
