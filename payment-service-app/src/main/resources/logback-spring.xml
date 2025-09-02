@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- По умолчанию Spring Boot выводит информацию в консоль, но часто бывает
+необходимость выводить логи также в файл. За отображение и хранение логов
+отвечает система т.н. аппендеров, которая настраивается через xml-файл конфигурации -->
+<configuration>
+
+    <property name="LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level --- [%thread] %-40.40logger{50} : %msg%n" />
+
+    <!-- STDOUT (консольный аппендер) -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- FILE с ежедневной ротацией -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- Это настройка т. н. ротации логов (rolling policy). Текущие данные пишутся в файл с
+        именем app.log, но каждый раз после полуночи он переименовывается в формате из
+        параметра fileNamePattern, после чего создается новый файл app.log, в который
+        продолжится сохранение новых записей -->
+        <file>logs/app.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Архив с указанием даты -->
+            <fileNamePattern>logs/app-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- Сколько файлов хранить -->
+            <maxHistory>20</maxHistory>
+            <!-- Максимальный размер хранилища всех логов (необязательно) -->
+            <totalSizeCap>500mb</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Корневой логгер (root) -->
+    <root level="${LOG_LEVEL}">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </root>
+
+</configuration>

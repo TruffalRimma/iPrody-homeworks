@@ -22,6 +22,11 @@
         <java.version>21</java.version>
         <postgresql.version>42.7.7</postgresql.version>
         <mapstruct.version>1.6.3</mapstruct.version>
+        <jakarta.version>3.1.1</jakarta.version>
+        <liquibase.maven.plugin>4.32.0</liquibase.maven.plugin>
+        <maven.compiler.plugin>3.14.0</maven.compiler.plugin>
+        <maven.checkstyle.plugin>3.6.0</maven.checkstyle.plugin>
+        <test.containers.version>1.19.3</test.containers.version>
     </properties>
 
     <dependencies>
@@ -36,10 +41,32 @@
             удобно отображать табличные данные на коллекции Java классов. Также эта
             библиотека совместима со стандартом JPA
             2. Spring Data JPA - это подсистема Spring для более удобной работы с JPA
-            совместимыми ORM провайдерами, такими как Hibernate.   -->
+            совместимыми ORM провайдерами, такими как Hibernate. -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- Отвечает за общий функционал Spring Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- Отвечает за взаимодействие с IAM приложениями, такими как KeyCloak.
+        Само название данного стартера указывает, что он делает наш сервис сервером ресурса
+        в терминологии протокола OAuth 2.0 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+
+        <!-- Стандартный функционал Spring Boot предоставляет средства не только для логирования,
+        но и для мониторинга параметров приложения. Актуатор добавляет дополнительный REST API со множеством
+        конечных точек, через которые можно получать метрики приложения -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
         <!-- Драйвер базы данных PostgreSQL -->
@@ -68,6 +95,32 @@
         </dependency>
 
         <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${test.containers.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${test.containers.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -76,17 +129,18 @@
 
     <build>
         <plugins>
-<!-- Плагин Spring Boot для maven, который собирает приложение в виде запускаемого jar-файла с особой структурой (uberjar)-->
+            <!-- Плагин Spring Boot для maven, который собирает приложение в виде запускаемого
+            jar-файла с особой структурой (uberjar) -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-<!-- Liquibase в виде библиотеки умеет только применять новые скрипты для обновления
-    структуры. Для использования других функций Liquibase необходимо подключить maven plugin-->
+            <!-- Liquibase в виде библиотеки умеет только применять новые скрипты для обновления
+            структуры. Для использования других функций Liquibase необходимо подключить maven plugin -->
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
-                <version>4.32.0</version>
+                <version>${liquibase.maven.plugin}</version>
                 <configuration>
                     <propertyFile>src/main/resources/liquibase.properties</propertyFile>
                 </configuration>
@@ -95,7 +149,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.14.0</version>
+                <version>${maven.compiler.plugin}</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -112,7 +166,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>${maven.checkstyle.plugin}</version>
                 <executions>
                     <execution>
                         <phase>verify</phase>

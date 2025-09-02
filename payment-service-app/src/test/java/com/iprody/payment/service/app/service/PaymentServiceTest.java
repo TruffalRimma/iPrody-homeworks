@@ -1,13 +1,13 @@
 package com.iprody.payment.service.app.service;
 
 import com.iprody.payment.service.app.dto.PaymentDto;
+import com.iprody.payment.service.app.exception.EntityNotFoundException;
 import com.iprody.payment.service.app.mapper.PaymentMapper;
 import com.iprody.payment.service.app.persistence.PaymentFilter;
 import com.iprody.payment.service.app.persistence.PaymentFilterFactory;
 import com.iprody.payment.service.app.persistence.PaymentRepository;
 import com.iprody.payment.service.app.persistence.entity.Payment;
 import com.iprody.payment.service.app.persistence.entity.PaymentStatus;
-import jakarta.persistence.EntityNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -115,7 +115,7 @@ class PaymentServiceTest {
         // when + then
         Assertions.assertThatThrownBy(() -> paymentService.get(guid))
                 .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("Платеж не найден: " + guid);
+                .hasMessage("Платеж не найден");
     }
 
     @Test
@@ -200,6 +200,105 @@ class PaymentServiceTest {
         assertEquals(page, capturedPageRequest.getPageNumber());
         assertEquals(size, capturedPageRequest.getPageSize());
         assertEquals(Sort.Direction.DESC, capturedPageRequest.getSort().getOrderFor(sortBy).getDirection());
+    }
+
+    @Test
+    void create_WhenRepositorySuccessfullySavedPaymentFromPaymentDto_ReturnsExactSamePaymentDto() {
+        // given
+        when(paymentMapper.toEntity(paymentDto)).thenReturn(payment);
+        when(paymentRepository.save(payment)).thenReturn(payment);
+        when(paymentMapper.toDto(payment)).thenReturn(paymentDto);
+
+        // when
+        PaymentDto result = paymentService.create(paymentDto);
+
+        // then
+        assertEquals(paymentDto.getGuid(), result.getGuid());
+        assertEquals(paymentDto.getInquiryRefId(), result.getInquiryRefId());
+        assertEquals(paymentDto.getAmount(), result.getAmount());
+        assertEquals(paymentDto.getCurrency(), result.getCurrency());
+        assertEquals(paymentDto.getTransactionRefId(), result.getTransactionRefId());
+        assertEquals(paymentDto.getStatus(), result.getStatus());
+        assertEquals(paymentDto.getNote(), result.getNote());
+        assertEquals(paymentDto.getCreatedAt(), result.getCreatedAt());
+        assertEquals(paymentDto.getUpdatedAt(), result.getUpdatedAt());
+    }
+
+    @Test
+    void update_WhenPaymentExistsById_ReturnsUpdatedPaymentDto() {
+        // given
+        when(paymentRepository.existsById(guid)).thenReturn(true);
+        when(paymentMapper.toEntity(paymentDto)).thenReturn(payment);
+        when(paymentRepository.save(payment)).thenReturn(payment);
+        when(paymentMapper.toDto(payment)).thenReturn(paymentDto);
+
+        // when
+        PaymentDto result = paymentService.update(guid, paymentDto);
+
+        // then
+        assertEquals(guid, result.getGuid());
+        assertEquals(BigDecimal.valueOf(123.45), result.getAmount());
+        assertEquals("USD", result.getCurrency());
+        assertEquals(PaymentStatus.APPROVED, result.getStatus());
+        assertEquals("Test note", result.getNote());
+    }
+
+    @Test
+    void update_WhenPaymentDoesNotExistById_ThrowsException() {
+        // given
+        when(paymentRepository.existsById(guid)).thenReturn(false);
+
+        // when + then
+        Assertions.assertThatThrownBy(() -> paymentService.update(guid, paymentDto))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("Платеж не найден");
+    }
+
+    @Test
+    void updateNote_WhenOptionalPaymentIsNotEmpty_ReturnsPaymentDtoWithNewNote() {
+        // given
+        when(paymentRepository.findById(guid)).thenReturn(Optional.of(payment));
+        when(paymentRepository.save(payment)).thenReturn(payment);
+        when(paymentMapper.toDto(payment)).thenReturn(paymentDto);
+
+        // when
+        paymentService.updateNote(guid, "Test note 2");
+
+        // then
+        ArgumentCaptor<Payment> paymentCaptor = ArgumentCaptor.forClass(Payment.class);
+        verify(paymentRepository).save(paymentCaptor.capture());
+        assertEquals("Test note 2", paymentCaptor.getValue().getNote());
+    }
+
+    @Test
+    void updateNote_WhenOptionalPaymentIsEmpty_ThrowsException() {
+        // given
+        when(paymentRepository.findById(guid)).thenReturn(Optional.empty());
+
+        // when + then
+        Assertions.assertThatThrownBy(() -> paymentService.updateNote(guid, "Test note 2"))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("Платеж не найден");
+    }
+
+    @Test
+    void delete_WhenPaymentExistsById_DoesNotThrowException() {
+        // given
+        when(paymentRepository.existsById(guid)).thenReturn(true);
+
+        // when + then
+        Assertions.assertThatNoException().isThrownBy(() -> paymentService.delete(guid));
+    }
+
+    @Test
+    void delete_WhenPaymentDoesNotExistById_ThrowsException() {
+        // given
+        when(paymentRepository.existsById(guid)).thenReturn(false);
+
+        // when + then
+        Assertions.assertThatThrownBy(() -> paymentService.delete(guid))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage("Платеж не найден");
     }
 
     /*
