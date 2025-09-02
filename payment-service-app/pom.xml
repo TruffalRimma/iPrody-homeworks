@@ -26,6 +26,7 @@
         <liquibase.maven.plugin>4.32.0</liquibase.maven.plugin>
         <maven.compiler.plugin>3.14.0</maven.compiler.plugin>
         <maven.checkstyle.plugin>3.6.0</maven.checkstyle.plugin>
+        <test.containers.version>1.19.3</test.containers.version>
     </properties>
 
     <dependencies>
@@ -60,6 +61,14 @@
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
 
+        <!-- Стандартный функционал Spring Boot предоставляет средства не только для логирования,
+        но и для мониторинга параметров приложения. Актуатор добавляет дополнительный REST API со множеством
+        конечных точек, через которые можно получать метрики приложения -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
         <!-- Драйвер базы данных PostgreSQL -->
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -86,15 +95,35 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${test.containers.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
-            <version>${jakarta.version}</version>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${test.containers.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
