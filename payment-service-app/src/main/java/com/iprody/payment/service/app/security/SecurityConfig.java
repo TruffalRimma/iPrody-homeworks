@@ -23,7 +23,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             // настраиваем security-фильтры
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/api/payments/**")
+            .authorizeHttpRequests(auth -> auth.requestMatchers("/api/payments/**", "/actuator/**")
                     .hasAnyRole("user", "admin", "reader").anyRequest().authenticated())
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtConverter)));
 
