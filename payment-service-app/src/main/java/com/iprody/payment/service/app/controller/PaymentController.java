@@ -48,7 +48,7 @@ public class PaymentController {
     public PaymentDto getPaymentByGuid(@PathVariable UUID guid) {
         log.info("GET payment by guid: {}", guid);
         final PaymentDto dto = paymentService.get(guid);
-        log.debug("Sending response PaymentDto: {}", dto.toString());
+        log.debug("Sending response PaymentDto: {}", dto);
         return dto;
     }
 
