@@ -1,4 +1,9 @@
-# Запуск = docker-compose up -d,
+# Запуск = docker-compose up -d (detached)
+# Что делает флаг -d:
+# - Запускает контейнеры в фоне - они работают независимо от текущего терминала
+# - Освобождает терминал - вы можете продолжать работать в командной строке
+# - Контейнеры продолжают работать даже если вы закроете терминал
+
 # Остановка = docker-compose down (-v) - Ключ -v указывает, что при остановке
 # нужно также удалить все тома (volumes) с данными
 
@@ -32,6 +37,24 @@ services:
     depends_on:
       - postgres
     restart: unless-stopped
+
+  # В качестве IAM провайдера используем KeyCloak. Это бесплатное
+  # приложение с открытым исходным кодом, написанное на Java и реализующее
+  # протокол аутентификации OAuth 2.0.
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.3
+    container_name: keycloak
+    command:
+      - start-dev   # режим для локального тестирования и прототипирования
+      - --http-port=8080
+      - --import-realm
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8085:8080"
+    volumes:
+      - ./realm-export.json:/opt/keycloak/data/import/realm-export.json
 
 volumes:
   pgdata:

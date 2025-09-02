@@ -1,12 +1,12 @@
 package com.iprody.payment.service.app.service;
 
 import com.iprody.payment.service.app.dto.PaymentDto;
+import com.iprody.payment.service.app.exception.EntityNotFoundException;
 import com.iprody.payment.service.app.mapper.PaymentMapper;
 import com.iprody.payment.service.app.persistence.PaymentFilter;
 import com.iprody.payment.service.app.persistence.PaymentFilterFactory;
 import com.iprody.payment.service.app.persistence.PaymentRepository;
 import com.iprody.payment.service.app.persistence.entity.Payment;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,7 +31,7 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentDto get(UUID guid) {
         return paymentRepository.findById(guid)
                 .map(paymentMapper::toDto)
-                .orElseThrow(() -> new EntityNotFoundException("Платеж не найден: " + guid));
+                .orElseThrow(() -> new EntityNotFoundException("Платеж не найден", "get", guid));
     }
 
     public List<PaymentDto> getAll() {
@@ -60,7 +60,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     public PaymentDto update(UUID guid, PaymentDto dto) {
         if (!paymentRepository.existsById(guid)) {
-            throw new EntityNotFoundException("Платеж не найден: " + guid);
+            throw new EntityNotFoundException("Платеж не найден", "update", guid);
         }
 
         final Payment updated = paymentMapper.toEntity(dto);
@@ -71,7 +71,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     public PaymentDto updateNote(UUID guid, String note) {
         final Payment updated = paymentRepository.findById(guid)
-            .orElseThrow(() -> new EntityNotFoundException("Платеж не найден: " + guid));
+            .orElseThrow(() -> new EntityNotFoundException("Платеж не найден", "updateNote", guid));
 
         updated.setNote(note);
         final Payment saved = paymentRepository.save(updated);
@@ -80,7 +80,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     public void delete(UUID guid) {
         if (!paymentRepository.existsById(guid)) {
-            throw new EntityNotFoundException("Платеж не найден: " + guid);
+            throw new EntityNotFoundException("Платеж не найден", "delete", guid);
         }
         paymentRepository.deleteById(guid);
     }
