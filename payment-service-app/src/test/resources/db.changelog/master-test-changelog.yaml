@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: tag-0.0
+      author: risaray
+      context: init
+      comment: "Tag for empty database"
+      changes:
+        - tagDatabase:
+            tag: v0.0
+
+  - include:
+      file: db/changelog/v1_0/db.changelog-1.0-create-payment.yaml
+      relativeToChangelogFile: false
+
+  - changeSet:
+      id: tag-1.0
+      author: risaray
+      changes:
+        - tagDatabase:
+            tag: v1.0
+
+  - include:
+      file: db/changelog/v1_1/db.changelog-1.1-add-demo-payment.yaml
+      relativeToChangelogFile: false
+
+  - changeSet:
+      id: tag-1.1
+      author: risaray
+      changes:
+        - tagDatabase:
+            tag: v1.1
+
+  - include:
+      file: db.changelog-test-data.yaml
+      relativeToChangelogFile: true

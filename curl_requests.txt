@@ -54,3 +54,34 @@ curl -X PATCH http://localhost:8080/api/payments/f7eebc99-9c0b-4ef8-bb6d-6bb9bd3
 
 # 7. DELETE /api/payments/{guid} - удаление платежа
 curl -X DELETE http://localhost:8080/api/payments/ac328a1a-1e60-4dd3-bee5-ed573d74c841
+
+# 8. POST /realms/iprody-lms/protocol/openid-connect/token - запрос токена
+curl -v -X POST http://localhost:8085/realms/iprody-lms/protocol/openid-connect/token \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=password" \
+  -d "client_id=basic_client" \
+  -d "client_secret=myclient-secret" \
+  -d "username=reader_user" \
+  -d "password=testpassword3"
+
+# Пример ответа
+# В поле access_token ответа содержится JWT-токен, который используется для аутентификации (<HEADER>.<PAYLOAD>.<SIGNATURE>)
+# Также в ответе содержится информация о сроке действия токена и т. н. refresh_token, который можно
+# использовать для продления аутентификации и получения нового токена перед истечением срока действия старого.
+{
+"access_token":
+"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImF1ZCI6Im
+ 15Y2xpZW50IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9kZW1vIiwicm
+ VhbG1fYWNjZXNzIjp7InJvbGVzIjpbInVzZXIiXX0sInByZWZlcnJlZF91c2VybmFtZSI6In
+ Rlc3R1c2VyIiwiZXhwIjoxNzAwMDAwMDAwLCJpYXQiOjE3MDAwMDAwMDAsImp0aSI6IjEyMy
+ 4uLiIsImVtYWlsIjoiZGVtby50ZXN0QGVtYWlsLmNvbSJ9.abc123...",
+"expires_in": 300,
+"refresh_expires_in": 1800,
+"refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+"token_type": "Bearer",
+"not-before-policy": 0,
+"session_state": "abcf-1234-xyz",
+"scope": "profile email"
+}
+
+# Далее в запросах нужно добавлять header "Authorization: Bearer <полученный токен доступа>"

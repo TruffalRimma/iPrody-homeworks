@@ -16,7 +16,24 @@ spring:
     properties:
       hibernate:
         format_sql: true # Форматировать SQL для читаемости
-
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yaml
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8085/realms/iprody-lms
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,liquibase,beans,metrics,env,loggers
+
+logging:
+  level:
+    com.iprody.payment: DEBUG
+    org.springframework.web: INFO
+    org.springframework.data: INFO
+    org.springframework.security: INFO
