@@ -92,4 +92,19 @@ public class PaymentDto {
     public void setUpdatedAt(OffsetDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    @Override
+    public String toString() {
+        return "PaymentDto{" +
+                "guid=" + guid +
+                ", inquiryRefId=" + inquiryRefId +
+                ", amount=" + amount +
+                ", currency='" + currency + '\'' +
+                ", transactionRefId=" + transactionRefId +
+                ", status=" + status +
+                ", note='" + note + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }
