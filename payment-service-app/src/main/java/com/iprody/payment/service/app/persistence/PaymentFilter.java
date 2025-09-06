@@ -61,4 +61,16 @@ public class PaymentFilter {
     public void setStatus(PaymentStatus status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "PaymentFilter{" +
+                "status=" + status +
+                ", currency='" + currency + '\'' +
+                ", minAmount=" + minAmount +
+                ", maxAmount=" + maxAmount +
+                ", createdAfter=" + createdAfter +
+                ", createdBefore=" + createdBefore +
+                '}';
+    }
 }

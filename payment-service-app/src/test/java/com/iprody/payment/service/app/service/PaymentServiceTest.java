@@ -1,8 +1,11 @@
 package com.iprody.payment.service.app.service;
 
+import com.iprody.payment.service.app.async.AsyncSender;
+import com.iprody.payment.service.app.async.XPaymentAdapterRequestMessage;
 import com.iprody.payment.service.app.dto.PaymentDto;
 import com.iprody.payment.service.app.exception.EntityNotFoundException;
 import com.iprody.payment.service.app.mapper.PaymentMapper;
+import com.iprody.payment.service.app.mapper.XPaymentAdapterMapper;
 import com.iprody.payment.service.app.persistence.PaymentFilter;
 import com.iprody.payment.service.app.persistence.PaymentFilterFactory;
 import com.iprody.payment.service.app.persistence.PaymentRepository;
@@ -54,6 +57,12 @@ class PaymentServiceTest {
 
     @Mock
     private PaymentMapper paymentMapper;
+
+    @Mock
+    private XPaymentAdapterMapper xPaymentAdapterMapper;
+
+    @Mock
+    private AsyncSender<XPaymentAdapterRequestMessage> sender;
 
     // Аннотация @InjectMocks позволяет внедрять созданные заглушки в тестируемый сервис
     @InjectMocks
@@ -207,6 +216,8 @@ class PaymentServiceTest {
         // given
         when(paymentMapper.toEntity(paymentDto)).thenReturn(payment);
         when(paymentRepository.save(payment)).thenReturn(payment);
+        when(xPaymentAdapterMapper.toXPaymentAdapterRequestMessage(payment))
+            .thenReturn(new XPaymentAdapterRequestMessage());
         when(paymentMapper.toDto(payment)).thenReturn(paymentDto);
 
         // when

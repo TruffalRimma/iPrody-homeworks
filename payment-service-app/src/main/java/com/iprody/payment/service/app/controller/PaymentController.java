@@ -48,7 +48,7 @@ public class PaymentController {
     public PaymentDto getPaymentByGuid(@PathVariable UUID guid) {
         log.info("GET payment by guid: {}", guid);
         final PaymentDto dto = paymentService.get(guid);
-        log.debug("Sending response PaymentDto: {}", dto);
+        log.debug("Sending response {}", dto);
         return dto;
     }
 
@@ -81,7 +81,7 @@ public class PaymentController {
         @RequestParam(defaultValue = "createdAt") String sortBy,
         @RequestParam(defaultValue = "desc") String direction
     ) {
-        log.info("GET (search) payment(s) by filter {}, page {}, size {}, sortBy {}, direction {}",
+        log.info("GET (search) payment(s) by {}, page {}, size {}, sortBy {}, direction {}",
             filter, page, size, sortBy, direction);
         final Page<PaymentDto> resultPage = paymentService.search(filter, page, size, sortBy, direction);
         log.debug("Sending response Page<PaymentDto> containing {} payment(s)", resultPage.toList().size());
@@ -100,7 +100,7 @@ public class PaymentController {
     public PaymentDto create(@RequestBody PaymentDto dto) {
         log.info("POST (create) new payment ({})", dto);
         final PaymentDto resultDto = paymentService.create(dto);
-        log.debug("Payment (guid = {}) was successfully created, sending response PaymentDto: {}",
+        log.debug("Payment (guid = {}) was successfully created, sending response {}",
             dto.getGuid(), resultDto);
         return resultDto;
     }
@@ -110,7 +110,7 @@ public class PaymentController {
     public PaymentDto update(@PathVariable UUID guid, @RequestBody PaymentDto dto) {
         log.info("PUT (update) payment's info (guid = {})", guid);
         final PaymentDto resultDto = paymentService.update(guid, dto);
-        log.debug("Payment (guid = {}) was successfully updated, sending response PaymentDto: {}", guid, resultDto);
+        log.debug("Payment (guid = {}) was successfully updated, sending response {}", guid, resultDto);
         return resultDto;
     }
 
@@ -120,7 +120,7 @@ public class PaymentController {
         final String note = dto.getNote();
         log.info("PATCH (update) payment's note (guid = {}) to \"{}\"", guid, note);
         final PaymentDto resultDto = paymentService.updateNote(guid, note);
-        log.debug("Payment's note (guid = {}) was successfully updated to \"{}\", sending response PaymentDto: {}",
+        log.debug("Payment's note (guid = {}) was successfully updated to \"{}\", sending response {}",
             guid, note, resultDto);
         return resultDto;
     }
