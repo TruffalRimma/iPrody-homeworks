@@ -1,7 +1,7 @@
 package com.iprody.payment.service.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.iprody.payment.service.app.AbstractPostgresIntegrationTest;
+import com.iprody.payment.service.app.AbstractIntegrationTest;
 import com.iprody.payment.service.app.TestJwtFactory;
 import com.iprody.payment.service.app.dto.PaymentDto;
 import com.iprody.payment.service.app.dto.PaymentNoteUpdateDto;
@@ -36,7 +36,7 @@ REST-endpoints приложения запросы, идентичные реа�
 ● важные сценарии, которые не получается покрыть unit-тестами
  */
 @AutoConfigureMockMvc
-class PaymentControllerIntegrationTest extends AbstractPostgresIntegrationTest {
+class PaymentControllerIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

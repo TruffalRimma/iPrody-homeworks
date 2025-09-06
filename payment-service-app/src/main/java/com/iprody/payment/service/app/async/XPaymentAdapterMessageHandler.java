@@ -15,14 +15,14 @@ import org.springframework.stereotype.Component;
 принятого сообщения.
  */
 @Component
-public class InMemoryXPaymentAdapterMessageHandler implements MessageHandler<XPaymentAdapterResponseMessage> {
+public class XPaymentAdapterMessageHandler implements MessageHandler<XPaymentAdapterResponseMessage> {
 
-    private static final Logger log = LoggerFactory.getLogger(InMemoryXPaymentAdapterMessageHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(XPaymentAdapterMessageHandler.class);
 
     private final PaymentRepository paymentRepository;
 
     @Autowired
-    public InMemoryXPaymentAdapterMessageHandler(PaymentRepository paymentRepository) {
+    public XPaymentAdapterMessageHandler(PaymentRepository paymentRepository) {
         this.paymentRepository = paymentRepository;
     }
 
