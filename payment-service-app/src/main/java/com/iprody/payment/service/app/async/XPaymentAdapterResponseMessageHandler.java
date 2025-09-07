@@ -1,5 +1,7 @@
 package com.iprody.payment.service.app.async;
 
+import com.iprody.common.async.MessageHandler;
+import com.iprody.common.async.XPaymentAdapterResponseMessage;
 import com.iprody.payment.service.app.exception.EntityNotFoundException;
 import com.iprody.payment.service.app.persistence.PaymentRepository;
 import com.iprody.payment.service.app.persistence.entity.Payment;
@@ -15,14 +17,14 @@ import org.springframework.stereotype.Component;
 принятого сообщения.
  */
 @Component
-public class XPaymentAdapterMessageHandler implements MessageHandler<XPaymentAdapterResponseMessage> {
+public class XPaymentAdapterResponseMessageHandler implements MessageHandler<XPaymentAdapterResponseMessage> {
 
-    private static final Logger log = LoggerFactory.getLogger(XPaymentAdapterMessageHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(XPaymentAdapterResponseMessageHandler.class);
 
     private final PaymentRepository paymentRepository;
 
     @Autowired
-    public XPaymentAdapterMessageHandler(PaymentRepository paymentRepository) {
+    public XPaymentAdapterResponseMessageHandler(PaymentRepository paymentRepository) {
         this.paymentRepository = paymentRepository;
     }
 

@@ -1,8 +1,8 @@
 package com.iprody.payment.service.app.async.kafka;
 
-import com.iprody.payment.service.app.async.AsyncListener;
-import com.iprody.payment.service.app.async.MessageHandler;
-import com.iprody.payment.service.app.async.XPaymentAdapterResponseMessage;
+import com.iprody.common.async.AsyncListener;
+import com.iprody.common.async.MessageHandler;
+import com.iprody.common.async.XPaymentAdapterResponseMessage;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

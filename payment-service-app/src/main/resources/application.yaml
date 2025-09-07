@@ -39,8 +39,8 @@ spring:
       auto-offset-reset: earliest # Откуда начинают читать новые consumers
       enable-auto-commit: false
       properties:
-        spring.json.trusted.packages: "com.iprody.payment.service.app.async"
-        spring.json.value.default.type: "com.iprody.payment.service.app.async.XPaymentAdapterResponseMessage"
+        spring.json.trusted.packages: "*"
+        spring.json.value.default.type: "com.iprody.common.async.XPaymentAdapterResponseMessage"
 
     listener:
       ack-mode: manual
