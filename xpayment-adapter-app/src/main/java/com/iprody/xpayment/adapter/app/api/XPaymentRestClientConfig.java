@@ -39,7 +39,7 @@ class XPaymentRestClientConfig {
      */
     @Bean
     ApiClient xPaymentApiClient(
-        @Value("app.x-payment-api.client.url") String xPaymentUrl,
+        @Value("${app.x-payment-api.client.url}") String xPaymentUrl,
         RestTemplate xPaymentRestTemplate
     ) {
         final ApiClient apiClient = new ApiClient(xPaymentRestTemplate);
