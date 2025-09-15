@@ -86,7 +86,7 @@
                         </goals>
                         <configuration>
                             <!-- inputSpec - путь к файлу или URL спецификации OpenAPI -->
-                            <inputSpec>xpayment-api.openapi.yml</inputSpec>
+                            <inputSpec>${project.basedir}/xpayment-api.openapi.yml</inputSpec>
                             <!-- generatorName - язык для генерации кода (здесь Java) -->
                             <generatorName>java</generatorName>
                             <!-- library - используемая HTTP-библиотека -->
