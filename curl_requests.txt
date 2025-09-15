@@ -108,4 +108,7 @@ curl -X POST http://localhost:9999/charges \
 }'
 
 2. GET /charges/{id} - Retrieve Charge Response
-curl -X GET http://localhost:9999/charges/f81d4fae-7dec-11d0-a765-00a0c91e6bf6
+curl -X GET http://localhost:9999/charges/f81d4fae-7dec-11d0-a765-00a0c91e6bf6 \
+-H "Content-Type: application/json" \
+-H "Authorization: Basic <username:password in Base64>" \
+-H "X-Pay-Account: <account>"
