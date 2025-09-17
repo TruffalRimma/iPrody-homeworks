@@ -21,7 +21,9 @@
     <properties>
         <java.version>21</java.version>
         <jackson.databind.version>0.2.7</jackson.databind.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
         <common.version>0.0.1-SNAPSHOT</common.version>
+        <maven.compiler.plugin.version>3.14.0</maven.compiler.plugin.version>
         <maven.checkstyle.plugin.version>3.6.0</maven.checkstyle.plugin.version>
         <openapi.generator.plugin.version>7.15.0</openapi.generator.plugin.version>
     </properties>
@@ -54,6 +56,19 @@
             <version>${common.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- TESTS -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -73,6 +88,23 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -130,7 +162,7 @@
                     <outputEncoding>UTF-8</outputEncoding>
                     <consoleOutput>true</consoleOutput>
                     <failOnViolation>true</failOnViolation>
-                    <excludes>**/com/iprody/xpayment/adapter/app/api/**</excludes>
+                    <excludeGeneratedSources>true</excludeGeneratedSources>
                 </configuration>
             </plugin>
         </plugins>
