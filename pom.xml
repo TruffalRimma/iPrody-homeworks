@@ -19,8 +19,10 @@
     </properties>
 
     <modules>
+        <module>common</module>
         <module>simple-http-server</module>
         <module>payment-service-app</module>
+        <module>xpayment-adapter-app</module>
     </modules>
 
 </project>

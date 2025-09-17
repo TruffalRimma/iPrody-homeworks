@@ -1,4 +1,4 @@
-package com.iprody.payment.service.app.async;
+package com.iprody.common.async;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -13,11 +13,6 @@ import java.util.UUID;
  * и метку времени его возникновения.
  */
 public class XPaymentAdapterResponseMessage implements Message {
-
-    /**
-     * Уникальный идентификатор сообщения.
-     */
-    private UUID messageGuid;
 
     /**
      * Уникальный идентификатор платежа.
@@ -51,7 +46,7 @@ public class XPaymentAdapterResponseMessage implements Message {
 
     @Override
     public UUID getMessageId() {
-        return messageGuid;
+        return paymentGuid;
     }
 
     public UUID getPaymentGuid() {
@@ -107,8 +102,7 @@ public class XPaymentAdapterResponseMessage implements Message {
     @Override
     public String toString() {
         return "XPaymentAdapterResponseMessage{" +
-                "messageGuid=" + messageGuid +
-                ", paymentGuid=" + paymentGuid +
+                "paymentGuid=" + paymentGuid +
                 ", amount=" + amount +
                 ", currency='" + currency + '\'' +
                 ", transactionRefId=" + transactionRefId +
