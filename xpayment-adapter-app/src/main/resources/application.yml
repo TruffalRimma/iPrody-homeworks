@@ -34,3 +34,9 @@ app:
         response: xpayment-adapter.responses
     consumer:
       retry: 1
+  x-payment-api:
+    client:
+      url: http://localhost:9999
+      username: paymentAgentIprody
+      password: iprodyTestPassword0123
+      account: paymentAgentIprodyApiToken

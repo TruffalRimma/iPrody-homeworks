@@ -85,3 +85,30 @@ curl -v -X POST http://localhost:8085/realms/iprody-lms/protocol/openid-connect/
 }
 
 # Далее в запросах нужно добавлять header "Authorization: Bearer <полученный токен доступа>"
+
+# ==============================================
+# CURL запросы для тестирования XPaymentController
+# ==============================================
+
+1. POST /charges - Create Charge Request
+curl -X POST http://localhost:9999/charges \
+-H "Content-Type: application/json" \
+-H "Authorization: Basic <username:password in Base64>" \
+-H "X-Pay-Account: <account>" \
+-d '{
+  "amount": "1090.50",
+  "currency": "USD",
+  "customer": "Henry Ford",
+  "order": "f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
+  "receiptEmail": "test@email.com",
+  "metadata": {
+    "key1": "value1",
+    "key2": "value2"
+  }
+}'
+
+2. GET /charges/{id} - Retrieve Charge Response
+curl -X GET http://localhost:9999/charges/f81d4fae-7dec-11d0-a765-00a0c91e6bf6 \
+-H "Content-Type: application/json" \
+-H "Authorization: Basic <username:password in Base64>" \
+-H "X-Pay-Account: <account>"
