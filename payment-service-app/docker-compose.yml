@@ -98,6 +98,24 @@ services:
 #  (Ctrl + C - чтобы выйти из Kafka console producer (из режима ввода сообщений в терминале))
 #  docker exec -it kafka /opt/bitnami/kafka/bin/kafka-console-producer.sh \ --bootstrap-server localhost:9092 \ --topic demo
 
+  rabbitmq:
+    image: rabbitmq:4.1.4-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"    # для подключения клиентов к брокеру
+      - "15672:15672"  # для доступа к административной консоли
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      # !!! предварительно нужно скачать плагин и разместить в текущей папке (добавила плагин в gitignore)
+      - ./rabbitmq_delayed_message_exchange-4.1.0.ez:/opt/rabbitmq/plugins/rabbitmq_delayed_message_exchange-4.1.0.ez
+    command: >
+      bash -c "rabbitmq-plugins enable --offline rabbitmq_delayed_message_exchange && rabbitmq-server"
+    restart: unless-stopped
+
 volumes:
   pgdata:
   kafka_data:
+  rabbitmq_data:

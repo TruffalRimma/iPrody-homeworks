@@ -83,3 +83,6 @@ jacoco.exec
 .attach_pid*
 *.hprof
 heapdump.hprof
+
+# Plugin
+*.ez
