@@ -2,6 +2,7 @@ package com.iprody.xpayment.adapter.app.async;
 
 import com.iprody.common.async.*;
 import com.iprody.xpayment.adapter.app.api.XPaymentProviderGateway;
+import com.iprody.xpayment.adapter.app.checkstate.PaymentStateCheckRegistrar;
 import com.iprody.xpayment.adapter.app.dto.ChargeResponseDto;
 import com.iprody.xpayment.adapter.app.mapper.CreateChargeRequestMapper;
 import org.slf4j.Logger;
@@ -19,16 +20,19 @@ public class XPaymentAdapterRequestMessageHandler implements MessageHandler<XPay
 
     private final XPaymentProviderGateway xPaymentProviderGateway;
     private final AsyncSender<XPaymentAdapterResponseMessage> asyncSender;
+    private final PaymentStateCheckRegistrar paymentStateCheckRegistrar;
     private final CreateChargeRequestMapper mapper;
 
     @Autowired
     public XPaymentAdapterRequestMessageHandler(
         XPaymentProviderGateway xPaymentProviderGateway,
         AsyncSender<XPaymentAdapterResponseMessage> asyncSender,
+        PaymentStateCheckRegistrar paymentStateCheckRegistrar,
         CreateChargeRequestMapper mapper
     ) {
         this.xPaymentProviderGateway = xPaymentProviderGateway;
         this.asyncSender = asyncSender;
+        this.paymentStateCheckRegistrar = paymentStateCheckRegistrar;
         this.mapper = mapper;
     }
 
@@ -38,10 +42,9 @@ public class XPaymentAdapterRequestMessageHandler implements MessageHandler<XPay
             message.getPaymentGuid(), message.getAmount(), message.getCurrency());
 
         try {
-            final ChargeResponseDto chargeResponseDto =
-                xPaymentProviderGateway.createCharge(mapper.toDto(message));
-            logger.info("Payment request with paymentGuid - {} is sent for payment processing. Current status - ",
-                chargeResponseDto.getStatus());
+            final ChargeResponseDto chargeResponseDto = xPaymentProviderGateway.createCharge(mapper.toDto(message));
+            logger.info("Payment request with paymentGuid - {} is sent for payment processing. Current status - {}",
+                chargeResponseDto.getOrder(), chargeResponseDto.getStatus());
 
             final XPaymentAdapterResponseMessage responseMessage = new XPaymentAdapterResponseMessage();
             responseMessage.setPaymentGuid(chargeResponseDto.getOrder());
@@ -52,6 +55,12 @@ public class XPaymentAdapterRequestMessageHandler implements MessageHandler<XPay
             responseMessage.setOccurredAt(OffsetDateTime.now());
 
             asyncSender.send(responseMessage);
+            paymentStateCheckRegistrar.register(
+                chargeResponseDto.getId(),
+                chargeResponseDto.getOrder(),
+                chargeResponseDto.getAmount(),
+                chargeResponseDto.getCurrency()
+            );
         } catch (RestClientException ex) {
             logger.error("Error in time of sending payment request with paymentGuid - {}",
                 message.getPaymentGuid(), ex);
